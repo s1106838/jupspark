@@ -1,6 +1,6 @@
 # Copyright (c) Jupyter Development Team.
 # Distributed under the terms of the Modified BSD License.
-FROM hub.docker.com/r/jupyter/pyspark-notebook/
+FROM hub.docker.com/jupyter/pyspark-notebook/
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
 
