@@ -1,50 +1,30 @@
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
-FROM jupyter/pyspark-notebook
+FROM quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.4.0
 
-#LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
+RUN pip install pip
+RUN pip install pandas
 
-USER root
+#change to root
+USER 0
 
-# RSpark config
-ENV R_LIBS_USER $SPARK_HOME/R/lib
-RUN fix-permissions $R_LIBS_USER
+# install dep
+RUN rpm -Uvh https://rpm.nodesource.com/pub_4.x/el/7/x86_64/nodesource-release-el7-1.noarch.rpm
+RUN yum install -y nodejs
 
-# R pre-requisites
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    fonts-dejavu \
-    gfortran \
-    gcc && \
-    rm -rf /var/lib/apt/lists/*
+#upgrade nodejs
+RUN npm cache clean -f
+RUN npm install -g n
+RUN n stable
 
-USER $NB_UID
+#test
+RUN pip install --upgrade jupyterlab-git
+#RUN jupyter lab build
 
-# R packages
-RUN conda install --quiet --yes \
-    'r-base=3.6.1' \
-    'r-ggplot2=3.2*' \
-    'r-irkernel=1.0*' \
-    'r-rcurl=1.95*' \
-    'r-sparklyr=1.0*' \
-    && \
-    conda clean --all -f -y && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-# Apache Toree kernel
-RUN pip install --no-cache-dir \
-    https://dist.apache.org/repos/dist/release/incubator/toree/0.3.0-incubating/toree-pip/toree-0.3.0.tar.gz \
-    && \
-    jupyter toree install --sys-prefix && \
-    rm -rf /home/$NB_USER/.local && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-# Spylon-kernel
-RUN conda install --quiet --yes 'spylon-kernel=0.4*' && \
-    conda clean --all -f -y && \
-    python -m spylon_kernel install --sys-prefix && \
-    rm -rf /home/$NB_USER/.local && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
+RUN jupyter labextension install @jupyterlab/git@^0.5.0 && \
+    npm cache clean --force && \
+    rm -rf $CONDA_DIR/share/jupyter/lab/staging
+RUN pip install pyspark
+    
+    
+#change to normal user    
+USER 1001
+    
