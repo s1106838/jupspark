@@ -15,13 +15,14 @@ RUN npm cache clean -f
 RUN npm install -g n
 RUN n stable
 
-#test
+#install git in jupyter
 RUN pip install --upgrade jupyterlab-git
-#RUN jupyter lab build
 
 RUN jupyter labextension install @jupyterlab/git@^0.5.0 && \
     npm cache clean --force && \
     rm -rf $CONDA_DIR/share/jupyter/lab/staging
+    
+#install pyspark    
 RUN pip install pyspark
     
     
