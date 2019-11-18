@@ -26,6 +26,9 @@ RUN jupyter labextension install @jupyterlab/git@^0.5.0 && \
 RUN pip install pyspark
     
     
+#install java
+RUN yum install openjdk-8-jdk
+    
 #change to normal user    
 USER 1001
     
