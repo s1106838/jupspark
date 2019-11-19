@@ -28,6 +28,7 @@ RUN pip install pyspark
     
 #install java
 RUN yum install -y java-1.8.0-openjdk
+RUN export JAVA_HOME=/opt/jdk1.8.0_201
     
 #change to normal user    
 USER 1001
