@@ -36,6 +36,14 @@ RUN jupyter labextension install @jupyterlab/git@^0.5.0 && \
 RUN pip install pyspark
     
     
+#install spark
+RUN cd /opt
+RUN wget http://www-eu.apache.org/dist/spark/spark-2.3.4/spark-2.3.4-bin-hadoop2.7.tgz
+RUN tar -xzf spark-2.3.4-bin-hadoop2.7.tgz
+RUN ln -s /opt/spark-2.2.1-bin-hadoop2.7  /opt/spark
+RUN export SPARK_HOME=/opt/spark
+RUN export PATH=$SPARK_HOME/bin:$PATH
+    
 #install java
 #RUN yum install -y java-1.8.0-openjdk
 #RUN export JAVA_HOME=/opt/jdk1.8.0_201
