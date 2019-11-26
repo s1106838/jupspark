@@ -45,13 +45,43 @@ RUN export SPARK_HOME=/opt/spark
 RUN export PATH=$SPARK_HOME/bin:$PATH
     
 #install java
-#RUN yum install -y java-1.8.0-openjdk
-#RUN export JAVA_HOME=/opt/jdk1.8.0_201
-
 RUN yum update -y && \
-yum install -y wget && \
-yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
-yum clean all
+    yum install -y wget && \
+    yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
+    yum clean all
+    
+    
+#install hadoop
+RUN yum -y install wget
+RUN yum -y install which
+
+# Setup env
+USER root
+ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0
+ENV HADOOP_USER hdfs
+ENV HADOOP_PREFIX /usr/local/hadoop
+ENV HADOOP_COMMON_HOME /usr/local/hadoop
+ENV HADOOP_HDFS_HOME /usr/local/hadoop
+ENV HADOOP_CONF_DIR /opt/cluster-conf
+
+# download hadoop
+RUN wget -q -O - http://apache.mirrors.pair.com/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz | tar -xzf - -C /usr/local \
+&& ln -s /usr/local/hadoop-2.7.7 /usr/local/hadoop \
+&& groupadd -r hadoop \
+&& groupadd -r $HADOOP_USER && useradd -r -g $HADOOP_USER -G hadoop $HADOOP_USER
+
+RUN mkdir -p $HADOOP_CONF_DIR
+
+# Setup permissions and ownership (httpfs tomcat conf for 600 permissions)
+RUN chown -R $HADOOP_USER:hadoop /usr/local/hadoop-2.7.7 && chmod -R 775 $HADOOP_CONF_DIR
+
+# set up hadoop user and bin path
+ENV HADOOP_USER_NAME $HADOOP_USER
+ENV PATH="${HADOOP_PREFIX}/bin:${PATH}"
+
+
+
+
     
 #change to normal user    
 USER 1001
