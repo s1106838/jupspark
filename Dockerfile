@@ -12,9 +12,9 @@ LABEL io.k8s.description="PySpark Jupyter Notebook." \
 
 
 # expose a port for the workers to connect back
-EXPOSE 42000
+EXPOSE 42000/tcp
 # also expose a port for the block manager
-EXPOSE 42100
+EXPOSE 42100/tcp
 
 # install dep
 RUN rpm -Uvh https://rpm.nodesource.com/pub_4.x/el/7/x86_64/nodesource-release-el7-1.noarch.rpm
