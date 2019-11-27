@@ -46,6 +46,7 @@ RUN tar -xzf spark-2.3.4-bin-hadoop2.7.tgz
 RUN ln -s /opt/spark-2.2.1-bin-hadoop2.7  /opt/spark
 RUN export SPARK_HOME=/opt/spark
 RUN export PATH=$SPARK_HOME/bin:$PATH
+RUN rm -rf /opt/*.tgz
     
 #install java
 RUN yum update -y && \
