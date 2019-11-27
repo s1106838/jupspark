@@ -34,7 +34,10 @@ RUN jupyter labextension install @jupyterlab/git@^0.5.0 && \
     
 #install pyspark    
 RUN pip install pyspark
-    
+
+
+#install yarn client for spark & Hadoop because ??
+RUN pip install yarn-api-client
     
 #install spark
 RUN cd /opt
