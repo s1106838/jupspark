@@ -43,7 +43,7 @@ RUN pip install yarn-api-client
 RUN cd /opt
 RUN wget http://www-eu.apache.org/dist/spark/spark-2.3.4/spark-2.3.4-bin-hadoop2.7.tgz
 RUN tar -xzf spark-2.3.4-bin-hadoop2.7.tgz
-RUN ln -s /opt/spark-2.2.1-bin-hadoop2.7  /opt/spark
+RUN ln -s /opt/spark* /opt/spark
 RUN export SPARK_HOME=/opt/spark
 RUN export PATH=$SPARK_HOME/bin:$PATH
 RUN rm -rf /opt/*.tgz
