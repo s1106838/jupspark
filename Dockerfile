@@ -46,7 +46,7 @@ RUN tar -xzf spark*
 RUN ln -s /opt/spark* /opt/spark
 RUN export SPARK_HOME=/opt/spark
 RUN export PATH=$SPARK_HOME/bin:$PATH
-RUN rm -rf /opt/*.tgz
+RUN rm -rf /opt/app-root/src/*.tgz
     
 #install java
 RUN yum update -y && \
@@ -56,3 +56,4 @@ RUN yum update -y && \
         
 #change to normal user    
 USER 1001
+RUN cd ~
